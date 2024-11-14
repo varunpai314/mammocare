@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1039824644230",
+    "project_id": "mammocare-47b29",
+    "storage_bucket": "mammocare-47b29.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039824644230:android:93027d3f63bffc3ab34907",
+        "android_client_info": {
+          "package_name": "com.techiepai.mammocare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHbKS2x_Wdy6OXRRpFpph4nuPDIbKpmW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
