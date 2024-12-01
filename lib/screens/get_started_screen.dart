@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mammocare/screens/registration_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStartedScreen extends StatelessWidget {
   const GetStartedScreen({super.key});
 
+  Future<void> _setGetStartedScreenVisited() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('getStartedScreenVisited', true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,7 +70,8 @@ class GetStartedScreen extends StatelessWidget {
             ),
             // Elevated button with 'Get Started' text
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await _setGetStartedScreenVisited();
                 // Navigate to the registration screen
                 Navigator.push(
                   context,

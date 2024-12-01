@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mammocare/screens/data_access_screen.dart';
+import 'package:mammocare/requests/auth.dart';
+import 'package:mammocare/screens/otp_screen.dart';
 import 'package:mammocare/screens/registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -53,13 +55,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   _buildPhoneNumberField(context, phoneNumberController),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DataAccessScreen(),
-                        ),
-                      );
+                    onPressed: () async {
+                      final res =
+                          await Auth.sendOtp('91${phoneNumberController.text}');
+                          print("otp Sent");
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OtpScreen(
+                              phoneNumber: phoneNumberController.text,
+                              ipNumber: '',
+                              orderId: res,
+                              isFromRegistration: false,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFE75D80),
@@ -156,6 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Expanded(
             child: TextField(
               controller: controller,
+              keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
                 labelText: 'Phone Number',
                 hintText: '00000 00000',

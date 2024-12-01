@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mammocare/screens/diet_and_nutrition_screen.dart';
 import 'package:mammocare/screens/home_screen.dart';
-import 'package:mammocare/screens/medication_screen.dart';
+import 'package:mammocare/screens/patient_medication.dart';
 import 'package:mammocare/screens/physical_activity_screen.dart';
+import 'package:mammocare/screens/profile_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -16,7 +17,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const MedicationScreen(),
+    const PatientMedication(
+      patientId: '103iu3',
+    ),
     const DietAndNutritionScreen(),
     const PhysicalActivityScreen(),
   ];
@@ -26,7 +29,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFF8F8),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         leading: Image.asset(
           'assets/splash.png',
           scale: 0.5,
@@ -45,68 +49,73 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.person_2_rounded, size: 32),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const ProfileScreen();
+              }));
+            },
           ),
+          const SizedBox(width: 10),
         ],
-        // backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: NavigationBar(
-          indicatorColor: const Color(0xFFE75D80),
-          backgroundColor: const Color(0xFFFFF8F8),
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          destinations: [
-            NavigationDestination(
-              icon: ImageIcon(
-                const AssetImage('assets/icons/home.png'),
-                color: Colors.grey.shade500,
-              ),
-              selectedIcon: const ImageIcon(
-                AssetImage('assets/icons/home.png'),
-                color: Colors.white,
-              ),
-              label: 'Home',
+        indicatorColor: const Color(0xFFE75D80),
+        backgroundColor: const Color(0xFFFFDADA),
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        destinations: [
+          const NavigationDestination(
+            icon: ImageIcon(
+              AssetImage('assets/icons/home.png'),
+              color: Color(0xFF757575),
             ),
-            NavigationDestination(
-              icon: ImageIcon(
-                const AssetImage('assets/icons/medicine.png'),
-                color: Colors.grey.shade500,
-              ),
-              selectedIcon: const ImageIcon(
-                AssetImage('assets/icons/medicine.png'),
-                color: Colors.white,
-              ),
-              label: 'Medicine',
+            selectedIcon: ImageIcon(
+              AssetImage('assets/icons/home.png'),
+              color: Color(0xFF211417),
             ),
-            NavigationDestination(
-              icon: ImageIcon(
-                const AssetImage('assets/icons/food.png'),
-                color: Colors.grey.shade500,
-              ),
-              selectedIcon: const ImageIcon(
-                AssetImage('assets/icons/food.png'),
-                color: Colors.white,
-              ),
-              label: 'Diet',
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: ImageIcon(
+              const AssetImage('assets/icons/medicine.png'),
+              color: Colors.grey.shade600,
             ),
-            NavigationDestination(
-              icon: ImageIcon(
-                const AssetImage('assets/icons/exercise.png'),
-                color: Colors.grey.shade500,
-              ),
-              selectedIcon: const ImageIcon(
-                AssetImage('assets/icons/exercise.png'),
-                color: Colors.white,
-              ),
-              label: 'Exercise',
+            selectedIcon: const ImageIcon(
+              AssetImage('assets/icons/medicine.png'),
+              color: Color(0xFF211417),
             ),
-          ]),
+            label: 'Medicine',
+          ),
+          NavigationDestination(
+            icon: ImageIcon(
+              const AssetImage('assets/icons/food.png'),
+              color: Colors.grey.shade600,
+            ),
+            selectedIcon: const ImageIcon(
+              AssetImage('assets/icons/food.png'),
+              color: Color(0xFF211417),
+            ),
+            label: 'Diet',
+          ),
+          NavigationDestination(
+            icon: ImageIcon(
+              const AssetImage('assets/icons/exercise.png'),
+              color: Colors.grey.shade600,
+            ),
+            selectedIcon: const ImageIcon(
+              AssetImage('assets/icons/exercise.png'),
+              color: Color(0xFF211417),
+            ),
+            label: 'Exercise',
+          ),
+        ],
+      ),
     );
   }
 }

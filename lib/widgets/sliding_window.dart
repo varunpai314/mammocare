@@ -21,13 +21,10 @@ class SlidingWindowState extends State<SlidingWindow> {
     Future.delayed(const Duration(seconds: 3)).then((_) {
       if (_pageController.hasClients) {
         int nextPage = _currentPage + 1;
-        if (nextPage >= 5) {
-          nextPage = 0;
-        }
         _pageController.animateToPage(
           nextPage,
           duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInToLinear,
+          curve: Curves.linear,
         );
         setState(() {
           _currentPage = nextPage;
@@ -48,64 +45,28 @@ class SlidingWindowState extends State<SlidingWindow> {
     return Column(
       children: [
         SizedBox(
-          // padding: const EdgeInsets.all(8.0),
           height: 200, // Adjust the height as needed
           child: Stack(
             children: [
-              PageView(
+              PageView.builder(
                 controller: _pageController,
                 onPageChanged: (int page) {
                   setState(() {
                     _currentPage = page;
                   });
                 },
-                children: <Widget>[
-                  _buildCard(
+                itemBuilder: (context, index) {
+                  int displayIndex = index % 5;
+                  return _buildCard(
                     context,
-                    'Chemotherapy Details',
-                    Icons.local_hospital,
-                    Colors.pinkAccent,
+                    _getCardTitle(displayIndex),
+                    _getCardIcon(displayIndex),
+                    _getCardColor(displayIndex),
                     () {
-                      // Navigate to chemotherapy details
+                      // Handle card tap
                     },
-                  ),
-                  _buildCard(
-                    context,
-                    'Book an Appointment',
-                    Icons.calendar_today,
-                    Colors.blueAccent,
-                    () {
-                      // Open calendar
-                    },
-                  ),
-                  _buildCard(
-                    context,
-                    'Stressed?',
-                    Icons.self_improvement,
-                    Colors.greenAccent,
-                    () {
-                      // Open mindfulness and relaxation techniques
-                    },
-                  ),
-                  _buildCard(
-                    context,
-                    'Education',
-                    Icons.school,
-                    Colors.orangeAccent,
-                    () {
-                      // Navigate to education details (from different file)
-                    },
-                  ),
-                  _buildCard(
-                    context,
-                    'Drugs to be Taken',
-                    Icons.medical_services,
-                    Colors.purpleAccent,
-                    () {
-                      // Show drug name and time
-                    },
-                  ),
-                ],
+                  );
+                },
               ),
               Positioned(
                 bottom: 16.0,
@@ -118,9 +79,9 @@ class SlidingWindowState extends State<SlidingWindow> {
                       duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.symmetric(horizontal: 4.0),
                       height: 8.0,
-                      width: _currentPage == index ? 16.0 : 8.0,
+                      width: (_currentPage % 5) == index ? 16.0 : 8.0,
                       decoration: BoxDecoration(
-                        color: _currentPage == index
+                        color: (_currentPage % 5) == index
                             ? Colors.white
                             : Colors.white.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8.0),
@@ -165,5 +126,56 @@ class SlidingWindowState extends State<SlidingWindow> {
         ),
       ),
     );
+  }
+
+  String _getCardTitle(int index) {
+    switch (index) {
+      case 0:
+        return 'Chemotherapy Details';
+      case 1:
+        return 'Book an Appointment';
+      case 2:
+        return 'Stressed?';
+      case 3:
+        return 'Education';
+      case 4:
+        return 'Drugs to be Taken';
+      default:
+        return '';
+    }
+  }
+
+  IconData _getCardIcon(int index) {
+    switch (index) {
+      case 0:
+        return Icons.local_hospital;
+      case 1:
+        return Icons.calendar_today;
+      case 2:
+        return Icons.self_improvement;
+      case 3:
+        return Icons.school;
+      case 4:
+        return Icons.medical_services;
+      default:
+        return Icons.error;
+    }
+  }
+
+  Color _getCardColor(int index) {
+    switch (index) {
+      case 0:
+        return Colors.pinkAccent;
+      case 1:
+        return Colors.blueAccent;
+      case 2:
+        return Colors.greenAccent;
+      case 3:
+        return Colors.orangeAccent;
+      case 4:
+        return Colors.purpleAccent;
+      default:
+        return Colors.grey;
+    }
   }
 }

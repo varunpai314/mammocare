@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mammocare/screens/data_access_screen.dart';
+import 'package:mammocare/requests/auth.dart';
 import 'package:mammocare/screens/login_screen.dart';
+import 'package:mammocare/screens/otp_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -17,6 +18,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -35,7 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       style: TextStyle(
                         fontFamily: 'Quicksand',
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 18,
                         color: Colors.black,
                       ),
                       children: [
@@ -45,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           style: TextStyle(
                             fontFamily: 'Quicksand',
                             fontWeight: FontWeight.normal,
-                            fontSize: 20,
+                            fontSize: 18,
                             color: Colors.black,
                           ),
                         ),
@@ -62,13 +64,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   _buildPhoneNumberField(context, phoneNumberController),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DataAccessScreen(),
-                        ),
-                      );
+                    onPressed: () async {
+                      final res =
+                          await Auth.sendOtp('91${phoneNumberController.text}');
+
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OtpScreen(
+                              phoneNumber: phoneNumberController.text,
+                              ipNumber: ipNumberController.text,
+                              orderId: res,
+                              isFromRegistration: true,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFE75D80),
@@ -78,7 +90,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                     ),
                     child: const Text(
-                      'Sign Up',
+                      'Register with OTP',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
