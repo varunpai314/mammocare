@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mammocare/screens/registration_screen.dart';
+import 'package:mammocare/screens/data_access_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStartedScreen extends StatelessWidget {
@@ -76,7 +76,7 @@ class GetStartedScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const RegistrationScreen(),
+                    builder: (context) => const DataAccessScreen(),
                   ),
                 );
               },

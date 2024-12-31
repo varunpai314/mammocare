@@ -45,10 +45,6 @@ class DailyWellnessCheckInState extends State<DailyWellnessCheckIn> {
 
   Future<void> _saveFormState() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('tookMedication', tookMedication ?? false);
-    await prefs.setBool('movedAround', movedAround ?? false);
-    await prefs.setString('symptoms', symptoms);
-    await prefs.setString('mood', mood);
     await prefs.setBool('isSubmitted', isSubmitted);
   }
 
@@ -129,7 +125,7 @@ class DailyWellnessCheckInState extends State<DailyWellnessCheckIn> {
 
                         debugPrint('Wellness Data: ${wellnessData.toString()}');
                         sendFormResponse(
-                            "103iu3", DateTime.now(), wellnessData);
+                            "KSH123", DateTime.now(), wellnessData);
                         setState(() {
                           isSubmitted = true;
                         });

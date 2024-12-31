@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mammocare/requests/auth.dart';
 import 'package:mammocare/screens/otp_screen.dart';
 import 'package:mammocare/screens/registration_screen.dart';
+import 'package:mammocare/screens/navigation_screen.dart'; // Import the NavigationScreen
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +14,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController phoneNumberController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkToken();
+  }
+
+  Future<void> _checkToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token != null) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const NavigationScreen(),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       final res =
                           await Auth.sendOtp('91${phoneNumberController.text}');
-                          print("otp Sent");
+                      print("otp Sent");
                       if (mounted) {
                         Navigator.push(
                           context,

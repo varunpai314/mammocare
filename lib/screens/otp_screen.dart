@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mammocare/models/patient.dart';
 import 'package:mammocare/requests/auth.dart';
 import 'package:mammocare/screens/navigation_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,29 +35,30 @@ class _OtpScreenState extends State<OtpScreen> {
     super.dispose();
   }
 
-  Future<void> _savePatientDetails(Patient patient) async {
+  Future<void> _savePatientDetails(Map<String, dynamic> patient) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('patientName', patient.patientName);
-    await prefs.setString('ipNumber', patient.ipNumber);
-    await prefs.setString('bloodGroup', patient.bloodGroup);
-    await prefs.setStringList('patientContacts', patient.patientContacts);
-    if (patient.height != null) {
-      await prefs.setInt('height', patient.height!);
+    await prefs.setString('patientName', patient['patientName']);
+    await prefs.setString('ipNumber', patient['ipNumber']);
+    await prefs.setString('bloodGroup', patient['bloodGroup']);
+    await prefs.setStringList(
+        'patientContacts', List<String>.from(patient['patientContacts']));
+    if (patient['height'] != null) {
+      await prefs.setInt('height', patient['height']);
     }
-    if (patient.weight != null) {
-      await prefs.setInt('weight', patient.weight!);
+    if (patient['weight'] != null) {
+      await prefs.setInt('weight', patient['weight']);
     }
-    if (patient.dob != null) {
-      await prefs.setString('dob', patient.dob!);
+    if (patient['dob'] != null) {
+      await prefs.setString('dob', patient['dob']);
     }
-    if (patient.doa != null) {
-      await prefs.setString('doa', patient.doa!);
+    if (patient['doa'] != null) {
+      await prefs.setString('doa', patient['doa']);
     }
-    if (patient.dod != null) {
-      await prefs.setString('dod', patient.dod!);
+    if (patient['dod'] != null) {
+      await prefs.setString('dod', patient['dod']);
     }
-    if (patient.dose != null) {
-      await prefs.setString('dose', patient.dose!);
+    if (patient['dose'] != null) {
+      await prefs.setString('dose', patient['dose']);
     }
   }
 
@@ -163,17 +163,18 @@ class _OtpScreenState extends State<OtpScreen> {
                                 await Auth.signUp(widget.ipNumber!, veriToken);
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('token', res['token']);
-                            print(res['token']);
+                            print(res);
 
                             await prefs.setString('ipNumber', widget.ipNumber!);
-                            // await _savePatientDetails();
+                            await _savePatientDetails(res['patient']);
                           } else {
                             final token = await Auth.signIn(veriToken);
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('token', token['token']);
+
                             // Save patient details to shared_preferences
-                            // final patient = Patient.fromJson(token['patient']);
-                            // await _savePatientDetails(patient);
+                            // await _savePatientDetails(token['patient']);
+                            print(token);
                           }
                           Navigator.pushAndRemoveUntil(
                             context,

@@ -6,7 +6,8 @@ class Auth {
   String baseUrl = '${Constants.baseUrl}/api';
   static Future<String> sendOtp(String phoneNumber) async {
     final response = await http.post(
-      Uri.parse('http://192.168.29.76:8090/api/auth/send-otp'),
+      Uri.parse(
+          'https://mamo-care-backend-otp-initiator.onrender.com/api/auth/send-otp'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'phone_number': phoneNumber}),
     );

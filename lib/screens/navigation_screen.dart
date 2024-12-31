@@ -17,9 +17,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const PatientMedication(
-      patientId: '103iu3',
-    ),
+    const PatientMedication(),
     const DietAndNutritionScreen(),
     const PhysicalActivityScreen(),
   ];

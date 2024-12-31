@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mammocare/constants.dart';
 
 String formatDateTimeWithoutMilliseconds(DateTime dateTime) {
   // Format DateTime to ISO-8601 without milliseconds
@@ -9,7 +10,7 @@ String formatDateTimeWithoutMilliseconds(DateTime dateTime) {
 Future<void> sendFormResponse(
     String patientId, DateTime submittedAt, List<dynamic> responses) async {
   // Define the API endpoint
-  const String url = 'http://localhost:3000/api/form/form';
+  String url = '${Constants.baseUrl}/api/form/form';
 //https://mamo-care-backend.onrender.com
   // Format the date to exclude milliseconds
   final String formattedDate = formatDateTimeWithoutMilliseconds(submittedAt);
@@ -20,12 +21,15 @@ Future<void> sendFormResponse(
     'submitted_at': formattedDate,
     'responses': responses
   };
-
+  print(body);
   // Send the POST request
   try {
     final response = await http.post(
       Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Constants.token}',
+      },
       body: jsonEncode(body),
     );
 
