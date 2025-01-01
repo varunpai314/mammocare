@@ -35,32 +35,32 @@ class _OtpScreenState extends State<OtpScreen> {
     super.dispose();
   }
 
-  Future<void> _savePatientDetails(Map<String, dynamic> patient) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('patientName', patient['patientName']);
-    await prefs.setString('ipNumber', patient['ipNumber']);
-    await prefs.setString('bloodGroup', patient['bloodGroup']);
-    await prefs.setStringList(
-        'patientContacts', List<String>.from(patient['patientContacts']));
-    if (patient['height'] != null) {
-      await prefs.setInt('height', patient['height']);
-    }
-    if (patient['weight'] != null) {
-      await prefs.setInt('weight', patient['weight']);
-    }
-    if (patient['dob'] != null) {
-      await prefs.setString('dob', patient['dob']);
-    }
-    if (patient['doa'] != null) {
-      await prefs.setString('doa', patient['doa']);
-    }
-    if (patient['dod'] != null) {
-      await prefs.setString('dod', patient['dod']);
-    }
-    if (patient['dose'] != null) {
-      await prefs.setString('dose', patient['dose']);
-    }
-  }
+  // Future<void> _savePatientDetails(Map<String, dynamic> patient) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('patientName', patient['patientName']);
+  //   await prefs.setString('ipNumber', patient['ipNumber']);
+  //   await prefs.setString('bloodGroup', patient['bloodGroup']);
+  //   await prefs.setStringList(
+  //       'patientContacts', List<String>.from(patient['patientContacts']));
+  //   if (patient['height'] != null) {
+  //     await prefs.setInt('height', patient['height']);
+  //   }
+  //   if (patient['weight'] != null) {
+  //     await prefs.setInt('weight', patient['weight']);
+  //   }
+  //   if (patient['dob'] != null) {
+  //     await prefs.setString('dob', patient['dob']);
+  //   }
+  //   if (patient['doa'] != null) {
+  //     await prefs.setString('doa', patient['doa']);
+  //   }
+  //   if (patient['dod'] != null) {
+  //     await prefs.setString('dod', patient['dod']);
+  //   }
+  //   if (patient['dose'] != null) {
+  //     await prefs.setString('dose', patient['dose']);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -166,11 +166,12 @@ class _OtpScreenState extends State<OtpScreen> {
                             print(res);
 
                             await prefs.setString('ipNumber', widget.ipNumber!);
-                            await _savePatientDetails(res['patient']);
+                            await prefs.setString('userId', res['user_id']);
                           } else {
                             final token = await Auth.signIn(veriToken);
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('token', token['token']);
+                            await prefs.setString('userId', token['user_id']);
 
                             // Save patient details to shared_preferences
                             // await _savePatientDetails(token['patient']);

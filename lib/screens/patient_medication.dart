@@ -17,11 +17,10 @@ class PatientMedication extends StatefulWidget {
 
 class _PatientMedicationState extends State<PatientMedication> {
   late Future<List<Medication>> _medicationsFuture;
-  late Future<bool> _isMealTimeSetFuture;
+  late Future<bool> _isMealTimeSetFuture = Future.value(false);
   late SharedPreferences _prefs;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  late String patientId;
 
   @override
   void initState() {
@@ -34,8 +33,7 @@ class _PatientMedicationState extends State<PatientMedication> {
   Future<void> _initializePreferences() async {
     _prefs = await SharedPreferences.getInstance();
     setState(() {
-      patientId = _prefs.getString('patientId') ?? '';
-      _medicationsFuture = fetchMedications(patientId);
+      _medicationsFuture = fetchMedications();
       _isMealTimeSetFuture = _isMealTimeSet();
     });
   }
@@ -48,14 +46,14 @@ class _PatientMedicationState extends State<PatientMedication> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<List<Medication>> fetchMedications(String patientId) async {
+  Future<List<Medication>> fetchMedications() async {
     String? token = _prefs.getString('token');
-
+    String? patientId = _prefs.getString('userId');
     if (token == null || token.isEmpty) {
       throw Exception('No token found');
     }
 
-    print('Token: $token'); // Debug print statement
+    print('Token: $token\nUser Id: $patientId'); // Debug print statement
 
     final response = await http.get(
       Uri.parse('${Constants.baseUrl}/api/medication/patient/$patientId'),
@@ -289,50 +287,51 @@ class _PatientMedicationState extends State<PatientMedication> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                bool isMealTimeSet = snapshot.data ?? false;
-                if (isMealTimeSet) {
-                  return FutureBuilder<List<Medication>>(
-                    future: _medicationsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(
-                            child: Text('No medications found.'));
-                      } else {
-                        List<Medication> medications = snapshot.data!;
-                        return ListView.builder(
-                          itemCount: medications.length,
-                          itemBuilder: (context, index) {
-                            Medication medication = medications[index];
-                            return _buildExpandableSection(context, medication);
-                          },
-                        );
-                      }
+                return const Center(child: Text('Failed to load settings.'));
+              } else if (snapshot.hasData && !snapshot.data!) {
+                return Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFE75D80)),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return _buildMealTimeInput();
+                        },
+                      );
                     },
-                  );
-                } else {
-                  return Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE75D80)),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return _buildMealTimeInput();
-                          },
-                        );
-                      },
-                      child: const Text('Set Meal Times',
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                  );
-                }
+                    child: const Text('Set Meal Times',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                );
+              } else {
+                return FutureBuilder<List<Medication>>(
+                  future: _medicationsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Center(
+                          child: Text('Failed to load medications.'));
+                    } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No medications found.'));
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            color: const Color(0xFFF3F3F3),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: _buildExpandableSection(
+                                context, snapshot.data![index]),
+                          );
+                        },
+                      );
+                    }
+                  },
+                );
               }
             },
           ),
