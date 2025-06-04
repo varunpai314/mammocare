@@ -49,9 +49,3 @@ Mammocare was a conceptually strong and socially driven project, but due to acad
   <img src="home.jpg" width="250" alt="Home Screen"/>
   <img src="diet.jpg" width="250" alt="Diet Plan Screen"/>
 </p>
-
----
-
-## 👨‍⚕️ Developed by
-
-Varun Pai and team — built with a mission to explore how software can positively impact healthcare delivery.
