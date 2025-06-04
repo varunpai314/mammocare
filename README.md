@@ -44,6 +44,12 @@ Mammocare was a conceptually strong and socially driven project, but due to acad
 
 ## 📷 Screenshots
 
+<p align="center">
+  <img src="screenshots/login.jpg" width="250" alt="Login Screen"/>
+  <img src="screenshots/home.jpg" width="250" alt="Home Screen"/>
+  <img src="screenshots/diet.jpg" width="250" alt="Diet Plan Screen"/>
+</p>
+
 ---
 
 ## 👨‍⚕️ Developed by
