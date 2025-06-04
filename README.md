@@ -44,14 +44,6 @@ Mammocare was a conceptually strong and socially driven project, but due to acad
 
 ## 📷 Screenshots
 
-*(You can add screenshots of your app's UI here in the future)*
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ---
 
 ## 👨‍⚕️ Developed by
